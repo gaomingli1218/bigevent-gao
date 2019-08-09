@@ -209,7 +209,7 @@
               - 可以通过模态框设置一个确认操作
                 - 退出成功，跳转到登录页面
                 - 如果点击取消，不进行跳转
-      */
+    */
 
       $('.user_center_link>a').eq(1).on('click',function () {
         // 通过模态框设置退出操作
@@ -225,9 +225,22 @@
             location.href = 'login.html'
           }
         })
-      })
+      });
     
-
+      // 获取用户信息展示在首页
+      $.get({
+        url : ' https://autumnfish.cn/big/admin/getuser',
+        // 返回的数据
+        success : function (res) {
+          console.log(res)
+          if (res.code === 200) {
+            // 将图片设置给两个展示区域 $('.user_info img)   $(.user_center_link img')
+            $('.user_info img,.user_center_link img').css('src',res.data.user_pic);
+            //  用户名显示
+            $('.user_info i').text(res.data.nickname);
+          } 
+        }
+      });
 
 
 
