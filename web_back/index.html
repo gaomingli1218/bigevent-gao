@@ -95,8 +95,7 @@
     </div>
     <!-- 模态框 -->
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    >
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -202,7 +201,7 @@
 
     <!-- 自己的逻辑 -->
     <script>
-      /*
+    /*
         功能分析：
           - 1 用户退出登录
             - 获取方式 $('.user_center_link>a').eq(1)  或者自己设置类名操作也行
@@ -212,25 +211,26 @@
                 - 如果点击取消，不进行跳转
       */
 
-      $('.user_center_link>a').eq(1).on('click', function () {
-        // 设置模态框进行确认(我错了，modal和confirm不一样，没有返回truefalse)
+      $('.user_center_link>a').eq(1).on('click',function () {
+        // 通过模态框设置退出操作
         $('#myModal').modal();
-      });
-    
-      // 设置离开按钮的点击事件
-      $('.btn-leave').on('click', function () {
-        // 发送请求：
+      })
+      // 点击模态框操作
+      $('.btn-leave').on('click',function() {
+        // 发送请求
         $.post({
           url : 'https://autumnfish.cn/big/admin/logout',
           success : function (res) {
-            // 直接进行跳转
-            location.href = 'login.html';
+            // 确认离开跳转到登录界面
+            location.href = 'login.html'
           }
-        }); 
-      });
+        })
+      })
     
-    
+
+
+
+
     </script>
-    
   </body>
 </html>
