@@ -153,6 +153,9 @@
             <button type="button" class="btn btn-primary" id="model_add">
               新增
             </button>
+            <button type="button" class="btn btn-primary" id="model_edit">
+              编辑
+            </button>
           </div>
         </div>
       </div>
@@ -185,14 +188,8 @@
         <td>{{$value.name}}</td>
         <td>{{$value.slug}}</td>
         <td class="text-center">
-          <a
-            href='javascript:editTr({"id":"4","slug":"travel","name":"爱旅行"});'
-            class="btn btn-info btn-xs" data-id="{{$value.id}}">编辑
-          </a>
-          <a
-            href="javascript:deleteTr( 4 );"
-            class="btn btn-danger btn-xs" data-id="{{}$value.id}">删除
-          </a>
+          <a href='javascript:;' class="btn btn-info btn-xs" data-id="{{$value.id}}">编辑</a>
+          <a href="javascript:;" class="btn btn-danger btn-xs" data-id="{{$value.id}}">删除</a>
         </td>
       </tr>
       {{/each}}
@@ -202,7 +199,7 @@
     <script>
       // 1.获取文章分类列表信息
       $.get({
-        url : 'https://autumnfish.cn/big/admin/category_search',
+        url : 'http://localhost:8000/admin/category_search',
         success : function(res) {
           if (res.code === 200) {
             $('tbody').html(template('fenlei',res.data))
@@ -220,14 +217,15 @@
         }
         // 发送请求
         $.post({
-          url : 'https://autumnfish.cn/big/admin/category_add',
+          url : 'http://localhost:8000/admin/category_add',
           data : {
             name : $('.cate_name').val(),
             slug : $('.cate_slug').val()
           },
           success : function (res) {
-            if (res.code === 200) {
-              location.reload();  //刷新页面
+            console.log(res);
+            if(res.code === 200) {
+              location.reload();
             }
           }
         })
@@ -235,9 +233,58 @@
     
 
       // 3.删除功能
+      $('tbody').on('click','.btn-danger',function() {
+        // 获取data-id的属性
+        var id=$(this).data('id');
+        // 找到要删除的父元素
+        var $tr=$(this).parents('tr');
+
+        $.post({
+          url : 'http://localhost:8000/admin/category_delete',
+          data : {
+            id:id,
+          },
+          success : function(res) {
+            console.log(res);
+            if(res.code === 200) {
+              $tr.remove();
+            }
+          }
+        })
+      })
+
 
       // 4.编辑功能
-      
+      $('tbody').on('click','.btn-info',function() {
+        // 获取data-id的属性
+        var id=$(this).data('id');
+
+        $('.cate_name').val($(this).parents('tr').children('td').eq(0).text());
+        $('.cate_slug').val($(this).parents('tr').children('td').eq(1).text());
+
+
+        // 设置编辑按钮的操作
+        $('.model_edit').on('click',function() {
+          if($('.cate_name').val() === '' || $('.cate_slug').val() === '') {
+            alert('请填写完整');
+            return;
+          }
+          $.post({
+            url : 'http://localhost:8000/admin/category_edit',
+            data : {
+              id : id,
+              name : $('.cate_name').val(),
+              slug : $('.cate_slug').val()
+            },
+            success :function(res) {
+              if (res.code === 200) {
+                location.reload();
+              }
+            }
+          })
+        })
+        
+      })
     
     </script>
   </body>
