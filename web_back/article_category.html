@@ -264,8 +264,9 @@
 
 
         // 设置编辑按钮的操作
-        $('.model_edit').on('click',function() {
+        $('#model_edit').on('click',function() {
           if($('.cate_name').val() === '' || $('.cate_slug').val() === '') {
+
             alert('请填写完整');
             return;
           }
